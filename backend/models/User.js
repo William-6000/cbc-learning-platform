@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema(
     firstName: { type: String, required: true, trim: true },
     lastName: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    password: { type: String, required: true, select: false },
     role: {
       type: String,
       enum: ['student', 'teacher', 'admin'],
@@ -30,12 +31,16 @@ const userSchema = new mongoose.Schema(
     gradeLevel: {
       type: Number,
       enum: [10, 11, 12],
-      required: true,
+      required() {
+        return this.role === 'student';
+      },
     },
     pathway: {
       type: String,
       enum: ['STEM', 'Social Sciences', 'Arts & Sports'],
-      required: true,
+      required() {
+        return this.role === 'student';
+      },
     },
     competencyMetrics: [competencyMetricSchema],
     isActive: { type: Boolean, default: true },
@@ -44,3 +49,4 @@ const userSchema = new mongoose.Schema(
 );
 
 export default mongoose.models.User || mongoose.model('User', userSchema);
+

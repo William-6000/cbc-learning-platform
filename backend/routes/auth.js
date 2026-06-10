@@ -153,7 +153,7 @@ export async function handleAuthRoutes(req, res, sendJson) {
         return true;
       }
 
-      const user = await User.findOne({ email }).select('+passwordHash');
+      const user = await User.findOne({ email }).select('+password');
 
       if (!user) {
         sendJson(res, 401, { error: 'Invalid email or password.' });

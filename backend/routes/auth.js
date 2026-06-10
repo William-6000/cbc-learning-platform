@@ -160,7 +160,7 @@ export async function handleAuthRoutes(req, res, sendJson) {
         return true;
       }
 
-      const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
 
       if (!isPasswordValid) {
         sendJson(res, 401, { error: 'Invalid email or password.' });

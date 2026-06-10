@@ -124,7 +124,7 @@ export async function handleAuthRoutes(req, res, sendJson) {
         firstName,
         lastName,
         email,
-        passwordHash,
+        password: passwordHash,
         role,
         gradeLevel: grade ? Number(grade) : undefined,
         pathway: pathway || undefined,

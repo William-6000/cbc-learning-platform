@@ -1,7 +1,11 @@
 import http from 'node:http';
+import mongoose from 'mongoose';
+
+import { handleAuthRoutes } from './routes/auth.js';
 
 const port = process.env.PORT || 4000;
 const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:3000';
+const mongoUri = process.env.MONGODB_URI;
 
 const roleNavigation = [
   {
@@ -58,18 +62,28 @@ function sendJson(res, statusCode, payload) {
   res.writeHead(statusCode, {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Content-Type': 'application/json',
   });
   res.end(JSON.stringify(payload));
 }
 
-const server = http.createServer((req, res) => {
+async function connectDatabase() {
+  if (!mongoUri) {
+    console.log('MONGODB_URI not set. Auth routes will require a database connection.');
+    return;
+  }
+
+  await mongoose.connect(mongoUri);
+  console.log('Connected to MongoDB.');
+}
+
+const server = http.createServer(async (req, res) => {
   if (req.method === 'OPTIONS') {
     res.writeHead(204, {
       'Access-Control-Allow-Origin': allowedOrigin,
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     });
     res.end();
     return;
@@ -80,7 +94,12 @@ const server = http.createServer((req, res) => {
       status: 'ok',
       service: 'cbc-learning-platform-backend',
       frontendOrigin: allowedOrigin,
+      database: mongoose.connection.readyState === 1 ? 'connected' : 'not-connected',
     });
+    return;
+  }
+
+  if (await handleAuthRoutes(req, res, sendJson)) {
     return;
   }
 
@@ -92,7 +111,15 @@ const server = http.createServer((req, res) => {
   sendJson(res, 404, { error: 'Route not found' });
 });
 
-server.listen(port, () => {
-  console.log(`CBC Learning Platform API listening on port ${port}.`);
-});
+connectDatabase()
+  .then(() => {
+    server.listen(port, () => {
+      console.log(`CBC Learning Platform API listening on port ${port}.`);
+    });
+  })
+  .catch((error) => {
+    console.error('Failed to start backend API:', error);
+    process.exit(1);
+  });
+    
     

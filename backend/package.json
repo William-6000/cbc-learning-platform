@@ -2,7 +2,10 @@
   "name": "cbc-learning-platform-backend",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
   "main": "server.js",
   "scripts": {
     "dev": "node server.js",

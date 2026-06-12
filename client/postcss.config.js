@@ -1,1 +1,2 @@
-client/src/__tests__/home.test.jsx
+export default { plugins: { tailwindcss: {}, autoprefixer: {} } };
+

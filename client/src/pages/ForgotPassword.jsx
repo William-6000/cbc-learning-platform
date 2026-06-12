@@ -1,0 +1,1 @@
+export default function ForgotPassword(){ return <section className="card mx-auto max-w-lg"><h1 className="font-display text-3xl font-black">Password support</h1><p className="mt-3 text-slate-600">Ask your school ICT admin to reset your password from the Admin Panel. For safety, reset links are issued through verified school emails.</p></section>; }

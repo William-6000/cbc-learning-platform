@@ -1,0 +1,2 @@
+const styles = { STEM: 'bg-stem-navy text-white ring-stem-cyan', SOCIAL_SCIENCES: 'bg-social-green text-white ring-social-gold', ARTS_AND_SPORTS: 'bg-arts-burgundy text-white ring-arts-orange' };
+export default function PathwayBadge({ pathway = 'STEM' }) { return <span className={`inline-flex rounded-full px-4 py-2 text-sm font-bold ring-2 ${styles[pathway]}`}>{pathway.replaceAll('_', ' ')}</span>; }

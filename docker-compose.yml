@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: cbc_admin
+      POSTGRES_PASSWORD: cbc_password
+      POSTGRES_DB: cbc_learning
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cbc_admin -d cbc_learning"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build: ./server
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://cbc_admin:cbc_password@postgres:5432/cbc_learning?schema=public
+      CLIENT_URL: http://localhost:5173
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "npx prisma migrate deploy --schema prisma/schema.prisma && npm run seed && npm start"
+
+  client:
+    build: ./client
+    environment:
+      VITE_API_URL: http://localhost:4000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+
+volumes:
+  postgres_data:
+  

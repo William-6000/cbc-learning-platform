@@ -11,7 +11,7 @@ enum CompetencyKey { COMMUNICATION_COLLABORATION CRITICAL_THINKING_PROBLEM_SOLVI
 enum NationalValue { UNITY INTEGRITY SUSTAINABILITY RESPONSIBILITY RESPECT PATRIOTISM }
 
 model School {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
   county String
   type SchoolType @default(PUBLIC)
@@ -21,7 +21,7 @@ model School {
 }
 
 model Pathway {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   code PathwayCode @unique
   name String
   description String
@@ -32,7 +32,7 @@ model Pathway {
 }
 
 model User {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
   email String @unique
   passwordHash String
@@ -55,7 +55,7 @@ model User {
 }
 
 model ParentStudent {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   parentId String
   studentId String
   parent User @relation("ParentLinks", fields: [parentId], references: [id])
@@ -64,7 +64,7 @@ model ParentStudent {
 }
 
 model Subject {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
   pathwayId String @map("pathway_id")
   pathway Pathway @relation(fields: [pathwayId], references: [id])
@@ -80,7 +80,7 @@ model Subject {
 }
 
 model Unit {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   subjectId String @map("subject_id")
   subject Subject @relation(fields: [subjectId], references: [id])
   title String
@@ -96,7 +96,7 @@ model Unit {
 }
 
 model Lesson {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   unitId String @map("unit_id")
   unit Unit @relation(fields: [unitId], references: [id])
   title String
@@ -108,7 +108,7 @@ model Lesson {
 }
 
 model Assessment {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   subjectId String @map("subject_id")
   subject Subject @relation(fields: [subjectId], references: [id])
   title String
@@ -121,7 +121,7 @@ model Assessment {
 }
 
 model Question {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   assessmentId String @map("assessment_id")
   assessment Assessment @relation(fields: [assessmentId], references: [id])
   text String
@@ -133,7 +133,7 @@ model Question {
 }
 
 model StudentProgress {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   studentId String @map("student_id")
   lessonId String @map("lesson_id")
   student User @relation("StudentProgressStudent", fields: [studentId], references: [id])
@@ -146,7 +146,7 @@ model StudentProgress {
 }
 
 model Grade {
-  id String @id @default(cuid())
+   id String @id @default(auto()) @map("_id") @db.ObjectId
   studentId String @map("student_id")
   assessmentId String @map("assessment_id")
   student User @relation("StudentGrades", fields: [studentId], references: [id])
@@ -160,7 +160,7 @@ model Grade {
 }
 
 model TeacherNote {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   teacherId String @map("teacher_id")
   subjectId String @map("subject_id")
   unitId String? @map("unit_id")
@@ -173,7 +173,7 @@ model TeacherNote {
 }
 
 model Announcement {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   schoolId String @map("school_id")
   authorId String @map("author_id")
   title String
@@ -185,7 +185,7 @@ model Announcement {
 }
 
 model Message {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   senderId String @map("sender_id")
   receiverId String @map("receiver_id")
   subject String
@@ -197,7 +197,7 @@ model Message {
 }
 
 model StudentCompetency {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   studentId String
   competency CompetencyKey
   score Int @default(50)

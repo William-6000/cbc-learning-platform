@@ -1,2 +1,0 @@
-import { Link } from 'react-router-dom';
-export default function SubjectCard({ subject }) { return <Link to={`/subjects/${subject.id}`} className="card block hover:-translate-y-1 transition"><p className="text-xs font-mono text-slate-500">{subject.syllabusCode}</p><h3 className="font-display text-xl font-black">{subject.name}</h3><p className="mt-2 text-sm text-slate-600">Grade {subject.gradeLevel} • {subject.units?.length || 0} units • {subject.assessments?.length || 0} assessments</p></Link>; }

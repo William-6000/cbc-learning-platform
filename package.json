@@ -1,0 +1,17 @@
+{
+  "name": "cbc-platform",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev:api": "npm run dev --workspace=apps/api",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
+    "build": "npm run build --workspaces --if-present",
+    "db:generate": "npm run prisma:generate --workspace=apps/api",
+    "db:push": "npm run prisma:push --workspace=apps/api"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.3"
+  }
+}

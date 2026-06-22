@@ -198,4 +198,4 @@ export async function getParentChildProgress(
   });
 
   res.json({ scores, cslLogs, profile });
-      }
+}
